@@ -372,45 +372,45 @@
     "horizontal_scroller": {
       "name": "Horizontal Scroller",
       "settings": {
+        "collection": {
+          "label": "Collection"
+        },
         "heading": {
-          "label": "Heading"
+          "label": "Heading",
+          "info": "Override the collection title. Leave blank to use collection name."
         },
         "heading_size": {
           "label": "Heading size"
         },
+        "items_to_show": {
+          "label": "Products to show"
+        },
         "max_width": {
           "label": "Maximum width"
-        }
-      },
-      "blocks": {
-        "item": {
-          "name": "Item",
-          "settings": {
-            "image": {
-              "label": "Image"
-            },
-            "badge": {
-              "label": "Badge"
-            },
-            "title": {
-              "label": "Title"
-            },
-            "price": {
-              "label": "Price"
-            },
-            "subtext": {
-              "label": "Subtext"
-            },
-            "rating": {
-              "label": "Rating"
-            }
-          }
+        },
+        "header__badge": {
+          "content": "Badge settings"
+        },
+        "badge_tag": {
+          "label": "Badge tag",
+          "info": "Products with this tag will show the badge. Use hyphens for multi-word tags."
+        },
+        "badge_text": {
+          "label": "Badge text"
+        },
+        "header__footer": {
+          "content": "Footer settings"
+        },
+        "show_view_all": {
+          "label": "Show \"View all\" button"
         }
       },
       "presets": {
         "name": "Horizontal Scroller",
         "category": "Custom"
       },
+      "default_title": "Featured Products",
+      "view_all": "View all",
       "out_of_5": "out of 5"
     }
   }

@@ -1,9 +1,21 @@
+{%- assign collection = collections[section.settings.collection] -%}
+{%- assign products_to_show = collection.products -%}
+{%- assign items_count = section.settings.items_to_show -%}
+
 <div class="horizontal-scroller" style="max-width: {{ section.settings.max_width }}px;">
   <header class="scroller-header">
-    <h2 class="scroller-title" style="font-size: {{ section.settings.heading_size }}px;">{{ section.settings.heading }}</h2>
+    <h2 class="scroller-title" style="font-size: {{ section.settings.heading_size }}px;">
+      {%- if section.settings.heading != blank -%}
+        {{ section.settings.heading }}
+      {%- elsif collection != blank -%}
+        {{ collection.title }}
+      {%- else -%}
+        {{ 'sections.horizontal_scroller.default_title' | t }}
+      {%- endif -%}
+    </h2>
     <div class="scroller-controls">
-      {% if section.blocks.size > 4 %}
-        <button class="scroller-arrow scroller-arrow--prev" aria-label="Previous">
+      {%- if products_to_show.size > 4 -%}
+        <button class="scroller-arrow scroller-arrow--prev" aria-label="Previous" disabled>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M15 18l-6-6 6-6"/>
           </svg>
@@ -13,55 +25,77 @@
             <path d="M9 18l6-6-6-6"/>
           </svg>
         </button>
-      {% endif %}
+      {%- endif -%}
     </div>
   </header>
 
   <div class="scroller-container">
-    <div class="scroller-track">
-      {% for block in section.blocks %}
-        <div class="scroller-item" {{ block.shopify_attributes }}>
-          {% if block.settings.image != blank %}
-            <div class="scroller-item__image-wrapper">
-              <img 
-                src="{{ block.settings.image | image_url: width: 400, height: 300 }}" 
-                alt="{{ block.settings.image.alt | default: block.settings.title }}"
-                class="scroller-item__image"
-                loading="lazy"
-                width="400"
-                height="300"
-              >
-              {% if block.settings.badge != blank %}
-                <span class="scroller-item__badge">{{ block.settings.badge }}</span>
-              {% endif %}
-            </div>
-          {% endif %}
-          
-          <div class="scroller-item__content">
-            {% if block.settings.title != blank %}
-              <h3 class="scroller-item__title">{{ block.settings.title }}</h3>
-            {% endif %}
-            
-            <div class="scroller-item__pricing">
-              {% if block.settings.price != blank %}
-                <span class="scroller-item__price">{{ block.settings.price }}</span>
-              {% endif %}
-              {% if block.settings.subtext != blank %}
-                <span class="scroller-item__subtext">{{ block.settings.subtext }}</span>
-              {% endif %}
-            </div>
-            
-            {% if block.settings.rating != blank %}
-              <div class="scroller-item__rating">
-                <span class="scroller-item__rating-value">{{ block.settings.rating }}</span>
-                <span class="scroller-item__rating-text">{{ 'sections.horizontal_scroller.out_of_5' | t }}</span>
+    <div class="scroller-track" data-items-count="{{ products_to_show.size }}">
+      {%- if collection != blank -%}
+        {%- for product in products_to_show limit: items_count -%}
+          <div class="scroller-item" {{ product.shopify_attributes }}>
+            <a href="{{ product.url }}" class="scroller-item__link">
+              {%- if product.featured_image != blank -%}
+                <div class="scroller-item__image-wrapper">
+                  <img 
+                    src="{{ product.featured_image | image_url: width: 400, height: 300 }}" 
+                    alt="{{ product.featured_image.alt | default: product.title }}"
+                    class="scroller-item__image"
+                    loading="lazy"
+                    width="400"
+                    height="300"
+                  >
+                  {%- if product.tags contains section.settings.badge_tag -%}
+                    <span class="scroller-item__badge">{{ section.settings.badge_text }}</span>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+              
+              <div class="scroller-item__content">
+                <h3 class="scroller-item__title">{{ product.title }}</h3>
+                
+                <div class="scroller-item__pricing">
+                  <span class="scroller-item__price">{{ product.price | money }}</span>
+                  {%- if product.compare_at_price > product.price -%}
+                    <span class="scroller-item__compare-price">{{ product.compare_at_price | money }}</span>
+                  {%- endif -%}
+                </div>
+                
+                {%- if product.metafields.reviews.rating.value != blank -%}
+                  <div class="scroller-item__rating">
+                    <span class="scroller-item__rating-value">{{ product.metafields.reviews.rating.value }}</span>
+                    <span class="scroller-item__rating-text">{{ 'sections.horizontal_scroller.out_of_5' | t }}</span>
+                  </div>
+                {%- endif -%}
               </div>
-            {% endif %}
+            </a>
           </div>
-        </div>
-      {% endfor %}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..items_count) -%}
+          <div class="scroller-item scroller-item--placeholder">
+            <div class="scroller-item__image-wrapper">
+              {{ 'product-' | append: i | placeholder_svg_tag: 'scroller-item__placeholder-image' }}
+            </div>
+            <div class="scroller-item__content">
+              <h3 class="scroller-item__title">{{ 'homepage.onboarding.product_title' | t }}</h3>
+              <div class="scroller-item__pricing">
+                <span class="scroller-item__price">{{ 1999 | money }}</span>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
     </div>
   </div>
+  
+  {%- if collection != blank and section.settings.show_view_all -%}
+    <div class="scroller-footer">
+      <a href="{{ collection.url }}" class="scroller-view-all">
+        {{ 'sections.horizontal_scroller.view_all' | t }} {{ collection.title }} →
+      </a>
+    </div>
+  {%- endif -%}
 </div>
 
 {% stylesheet %}
@@ -197,6 +231,13 @@
   color: #717171;
 }
 
+.scroller-item__compare-price {
+  font-size: 14px;
+  color: #717171;
+  text-decoration: line-through;
+  margin-left: 8px;
+}
+
 .scroller-item__rating {
   display: flex;
   align-items: center;
@@ -211,6 +252,66 @@
 .scroller-item__rating-text {
   font-size: 14px;
   color: #717171;
+}
+
+.scroller-item__link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.scroller-item--placeholder {
+  border: 2px dashed #dddddd;
+}
+
+.scroller-item__placeholder-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scroller-footer {
+  text-align: center;
+  margin-top: 24px;
+}
+
+.scroller-view-all {
+  display: inline-flex;
+  align-items: center;
+  color: #222222;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 12px 24px;
+  border: 1px solid #222222;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.scroller-view-all:hover {
+  background: #222222;
+  color: white;
+}
+
+/* Enhanced slider functionality */
+.scroller-track {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroller-arrow {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.scroller-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.scroller-arrow:not(:disabled):hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* Desktop styles */
@@ -230,6 +331,17 @@
     flex: 0 0 calc(20% - 13px);
   }
 }
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .scroller-track {
+    scroll-snap-type: none;
+  }
+  
+  .scroller-arrow {
+    display: none;
+  }
+}
 {% endstylesheet %}
 
 {% javascript %}
@@ -241,10 +353,25 @@ document.addEventListener('DOMContentLoaded', function() {
     const prevBtn = scroller.querySelector('.scroller-arrow--prev');
     const nextBtn = scroller.querySelector('.scroller-arrow--next');
     
-    if (!track || !prevBtn || !nextBtn) return;
+    if (!track) return;
+    
+    // Get item width for precise scrolling
+    function getItemWidth() {
+      const firstItem = track.querySelector('.scroller-item');
+      if (!firstItem) return 300;
+      
+      const itemStyle = window.getComputedStyle(firstItem);
+      const gapStyle = window.getComputedStyle(track);
+      const itemWidth = firstItem.offsetWidth;
+      const gap = parseInt(gapStyle.gap) || 16;
+      
+      return itemWidth + gap;
+    }
     
     function scrollTrack(direction) {
-      const scrollAmount = 300; // Approximate width of one item + gap
+      const itemWidth = getItemWidth();
+      const scrollAmount = itemWidth;
+      
       if (direction === 'prev') {
         track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
       } else {
@@ -252,27 +379,86 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
     
-    prevBtn.addEventListener('click', function() {
-      scrollTrack('prev');
-    });
-    
-    nextBtn.addEventListener('click', function() {
-      scrollTrack('next');
-    });
-    
-    // Update button states based on scroll position
     function updateButtonStates() {
+      if (!prevBtn || !nextBtn) return;
+      
       const maxScroll = track.scrollWidth - track.clientWidth;
+      const isAtStart = track.scrollLeft <= 5; // Small threshold for floating point precision
+      const isAtEnd = track.scrollLeft >= maxScroll - 5;
       
-      prevBtn.disabled = track.scrollLeft <= 0;
-      nextBtn.disabled = track.scrollLeft >= maxScroll;
-      
-      prevBtn.style.opacity = prevBtn.disabled ? '0.5' : '1';
-      nextBtn.style.opacity = nextBtn.disabled ? '0.5' : '1';
+      prevBtn.disabled = isAtStart;
+      nextBtn.disabled = isAtEnd;
     }
     
-    track.addEventListener('scroll', updateButtonStates);
-    updateButtonStates(); // Initial state
+    // Button click handlers
+    if (prevBtn) {
+      prevBtn.addEventListener('click', function() {
+        scrollTrack('prev');
+      });
+    }
+    
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function() {
+        scrollTrack('next');
+      });
+    }
+    
+    // Scroll event listener with throttling
+    let scrollTimeout;
+    track.addEventListener('scroll', function() {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(updateButtonStates, 10);
+    });
+    
+    // Touch/swipe support for mobile
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    
+    track.addEventListener('mousedown', function(e) {
+      isDown = true;
+      track.style.cursor = 'grabbing';
+      startX = e.pageX - track.offsetLeft;
+      scrollLeft = track.scrollLeft;
+    });
+    
+    track.addEventListener('mouseleave', function() {
+      isDown = false;
+      track.style.cursor = 'grab';
+    });
+    
+    track.addEventListener('mouseup', function() {
+      isDown = false;
+      track.style.cursor = 'grab';
+    });
+    
+    track.addEventListener('mousemove', function(e) {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - track.offsetLeft;
+      const walk = (x - startX) * 2; // Adjust scroll speed
+      track.scrollLeft = scrollLeft - walk;
+    });
+    
+    // Keyboard navigation
+    track.setAttribute('tabindex', '0');
+    track.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowLeft') {
+        scrollTrack('prev');
+      } else if (e.key === 'ArrowRight') {
+        scrollTrack('next');
+      }
+    });
+    
+    // Initialize button states
+    setTimeout(updateButtonStates, 100); // Small delay to ensure layout is complete
+    
+    // Handle window resize
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(updateButtonStates, 250);
+    });
   });
 });
 {% endjavascript %}
@@ -283,10 +469,15 @@ document.addEventListener('DOMContentLoaded', function() {
   "class": "horizontal-scroller-section",
   "settings": [
     {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:sections.horizontal_scroller.settings.collection.label"
+    },
+    {
       "type": "text",
       "id": "heading",
       "label": "t:sections.horizontal_scroller.settings.heading.label",
-      "default": "Popular homes in Cape Town"
+      "info": "t:sections.horizontal_scroller.settings.heading.info"
     },
     {
       "type": "range",
@@ -300,6 +491,15 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     {
       "type": "range",
+      "id": "items_to_show",
+      "label": "t:sections.horizontal_scroller.settings.items_to_show.label",
+      "min": 2,
+      "max": 20,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
       "id": "max_width",
       "label": "t:sections.horizontal_scroller.settings.max_width.label",
       "min": 800,
@@ -307,69 +507,39 @@ document.addEventListener('DOMContentLoaded', function() {
       "step": 50,
       "unit": "px",
       "default": 900
-    }
-  ],
-  "blocks": [
+    },
     {
-      "type": "item",
-      "name": "t:sections.horizontal_scroller.blocks.item.name",
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "t:sections.horizontal_scroller.blocks.item.settings.image.label"
-        },
-        {
-          "type": "text",
-          "id": "badge",
-          "label": "t:sections.horizontal_scroller.blocks.item.settings.badge.label",
-          "default": "Guest favorite"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "t:sections.horizontal_scroller.blocks.item.settings.title.label",
-          "default": "Hotel in Cape Town"
-        },
-        {
-          "type": "text",
-          "id": "price",
-          "label": "t:sections.horizontal_scroller.blocks.item.settings.price.label",
-          "default": "$144"
-        },
-        {
-          "type": "text",
-          "id": "subtext",
-          "label": "t:sections.horizontal_scroller.blocks.item.settings.subtext.label",
-          "default": "for 2 nights"
-        },
-        {
-          "type": "text",
-          "id": "rating",
-          "label": "t:sections.horizontal_scroller.blocks.item.settings.rating.label",
-          "default": "4.88"
-        }
-      ]
+      "type": "header",
+      "content": "t:sections.horizontal_scroller.settings.header__badge.content"
+    },
+    {
+      "type": "text",
+      "id": "badge_tag",
+      "label": "t:sections.horizontal_scroller.settings.badge_tag.label",
+      "info": "t:sections.horizontal_scroller.settings.badge_tag.info",
+      "default": "guest-favorite"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "t:sections.horizontal_scroller.settings.badge_text.label",
+      "default": "Guest favorite"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.horizontal_scroller.settings.header__footer.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "t:sections.horizontal_scroller.settings.show_view_all.label",
+      "default": true
     }
   ],
   "presets": [
     {
       "name": "t:sections.horizontal_scroller.presets.name",
-      "category": "t:sections.horizontal_scroller.presets.category",
-      "blocks": [
-        {
-          "type": "item"
-        },
-        {
-          "type": "item"
-        },
-        {
-          "type": "item"
-        },
-        {
-          "type": "item"
-        }
-      ]
+      "category": "t:sections.horizontal_scroller.presets.category"
     }
   ]
 }
