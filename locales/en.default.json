@@ -365,78 +365,129 @@
       "quantity_maximum": "Maximum of {{ maximum }}",
       "in_cart": "in cart",
       "default_title": "Default Title",
-      "sticky_add_to_cart": "Quick add to cart bar"
-    }
-  },
-  "sections": {
-    "horizontal_scroller": {
       "name": "Horizontal Scroller",
-      "settings": {
-        "collection": {
-          "label": "Collection"
-        },
-        "heading": {
-          "label": "Heading",
-          "info": "Override the collection title. Leave blank to use collection name."
-        },
-        "heading_size": {
-          "label": "Heading size"
-        },
-        "desktop_items_to_show": {
-          "label": "Desktop products to show"
-        },
-        "mobile_items_to_show": {
-          "label": "Mobile products to show"
-        },
-        "section_width": {
-          "label": "Section width",
-          "options": {
-            "page": "Page width",
-            "full": "Full width"
-          }
-        },
-        "header__badge": {
-          "content": "Badge settings"
-        },
-        "badge_tag": {
-          "label": "Badge tag",
-          "info": "Products with this tag will show the badge. Use hyphens for multi-word tags."
-        },
-        "badge_text": {
-          "label": "Badge text"
-        },
-        "duration_text": {
-          "label": "Duration text"
-        },
-        "header__footer": {
-          "content": "Footer settings"
-        },
-        "show_view_all": {
-          "label": "Show \"View all\" button"
-        },
-        "header__design": {
-          "content": "Design settings"
-        },
-        "color_scheme": {
-          "label": "Color scheme"
-        },
-        "padding_top": {
-          "label": "Top padding"
-        },
-        "padding_bottom": {
-          "label": "Bottom padding"
-        },
-        "card_border_radius": {
-          "label": "Card border radius"
+      "category": "Custom"
+    },
+    "default_title": "Featured Products",
+    "view_all": "View all",
+    "out_of_5": "out of 5"
+  },
+  "property_list": {
+    "name": "Property List",
+    "settings": {
+      "collection": {
+        "label": "Collection"
+      },
+      "header__content": {
+        "content": "Content settings"
+      },
+      "heading": {
+        "label": "Heading",
+        "info": "Override the collection title. Leave blank to use collection name."
+      },
+      "heading_size": {
+        "label": "Heading size"
+      },
+      "desktop_items_to_show": {
+        "label": "Desktop properties to show"
+      },
+      "mobile_items_to_show": {
+        "label": "Mobile properties to show"
+      },
+      "header__layout": {
+        "content": "Layout settings"
+      },
+      "layout_type": {
+        "label": "Layout type",
+        "options": {
+          "grid": "Grid",
+          "carousel": "Carousel"
         }
       },
-      "presets": {
-        "name": "Horizontal Scroller",
-        "category": "Custom"
+      "carousel_on_mobile": {
+        "label": "Carousel on mobile"
       },
-      "default_title": "Featured Products",
-      "view_all": "View all",
-      "out_of_5": "out of 5"
+      "columns": {
+        "label": "Columns"
+      },
+      "mobile_columns": {
+        "label": "Mobile columns",
+        "options": {
+          "one": "1",
+          "two": "2"
+        }
+      },
+      "mobile_card_size": {
+        "label": "Mobile card size",
+        "options": {
+          "two": "2 cards"
+        }
+      },
+      "columns_gap": {
+        "label": "Columns gap"
+      },
+      "header__badge": {
+        "content": "Badge settings"
+      },
+      "badge_tag": {
+        "label": "Badge tag",
+        "info": "Products with this tag will show the badge. Use hyphens for multi-word tags."
+      },
+      "badge_text": {
+        "label": "Badge text"
+      },
+      "duration_text": {
+        "label": "Duration text"
+      },
+      "header__design": {
+        "content": "Design settings"
+      },
+      "section_width": {
+        "label": "Section width",
+        "options": {
+          "page": "Page width",
+          "full": "Full width"
+        }
+      },
+      "gap": {
+        "label": "Gap"
+      },
+      "color_scheme": {
+        "label": "Color scheme"
+      },
+      "padding_top": {
+        "label": "Top padding"
+      },
+      "padding_bottom": {
+        "label": "Bottom padding"
+      },
+      "card_border_radius": {
+        "label": "Card border radius"
+      }
+    },
+    "presets": {
+      "name": "Property List",
+      "category": "Custom"
+    },
+    "blocks": {
+      "header": {
+        "name": "Header"
+      },
+      "heading": {
+        "name": "Heading"
+      },
+      "property_card": {
+        "name": "Property Card",
+        "settings": {
+          "product": {
+            "label": "Product"
+          }
+        },
+        "presets": {
+          "name": "Property Card",
+          "category": "Content"
+        }
+      }
     }
   }
 }

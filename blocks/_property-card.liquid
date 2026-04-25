@@ -1,0 +1,262 @@
+{% doc %}
+  Renders a property card with image, badges, title, pricing, and rating.
+  Based on Prompt1.md specifications for Airbnb-style property cards.
+
+  @param {product} product - The product to display
+  @param {string} badge_tag - Tag to trigger badge display
+  @param {string} badge_text - Text to show in badge
+  @param {string} duration_text - Duration text for pricing
+
+  @example
+  {% render 'property-card', product: product, badge_tag: 'guest-favorite', badge_text: 'Guest favorite' %}
+{% enddoc %}
+
+{% liquid
+  assign product = block.settings.product | default: closest.product
+  assign badge_tag = section.settings.badge_tag | default: 'guest-favorite'
+  assign badge_text = section.settings.badge_text | default: 'Guest favorite'
+  assign duration_text = section.settings.duration_text | default: 'for 2 nights'
+  assign card_border_radius = section.settings.card_border_radius | default: 12
+%}
+
+<div class="property-card" style="--card-border-radius: {{ card_border_radius }}px;">
+  <a href="{{ product.url }}" class="property-card__link">
+    {%- if product.featured_image != blank -%}
+      <div class="property-card__image-wrapper">
+        <img 
+          src="{{ product.featured_image | image_url: width: 400, height: 300 }}" 
+          alt="{{ product.featured_image.alt | default: product.title }}"
+          class="property-card__image"
+          loading="lazy"
+          width="400"
+          height="300"
+        >
+        {%- if product.tags contains badge_tag -%}
+          <span class="property-card__badge">{{ badge_text }}</span>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    
+    <div class="property-card__content">
+      {%- if product.tags contains badge_tag -%}
+        <div class="property-card__badge-row">
+          <span class="property-card__badge property-card__badge--inline">{{ badge_text }}</span>
+          <span class="property-card__badge property-card__badge--inline">{{ badge_text }}</span>
+        </div>
+      {%- endif -%}
+      
+      <h3 class="property-card__title">{{ product.title }}</h3>
+      
+      <div class="property-card__pricing">
+        <div class="property-card__price-main">
+          <span class="property-card__price">{{ product.price | money }}</span>
+        </div>
+        <div class="property-card__duration">
+          <span class="property-card__duration-text">{{ duration_text }}</span>
+        </div>
+        <div class="property-card__price-combined">
+          <span class="property-card__price">{{ product.price | money }}</span>
+          <span class="property-card__duration-text">{{ duration_text }}</span>
+        </div>
+        <span class="property-card__separator">,</span>
+        <span class="property-card__separator-dot">·</span>
+      </div>
+      
+      {%- if product.metafields.reviews.rating.value != blank -%}
+        <div class="property-card__rating">
+          <span class="property-card__rating-value">{{ product.metafields.reviews.rating.value }}</span>
+          <span class="property-card__rating-text">out of 5</span>
+        </div>
+      {%- endif -%}
+    </div>
+  </a>
+</div>
+
+{% stylesheet %}
+.property-card {
+  min-width: 0;
+  scroll-snap-align: start;
+  background: white;
+  border-radius: var(--card-border-radius, 12px);
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.property-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.property-card__image-wrapper {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.property-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.property-card__badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: #222222;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.property-card__badge-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.property-card__badge--inline {
+  position: static;
+  background: #ffffff;
+  color: #222222;
+  border: 1px solid #dddddd;
+  font-size: 11px;
+  padding: 2px 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.property-card__content {
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.property-card__title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: #222222;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 2.8em;
+}
+
+.property-card__pricing {
+  margin-bottom: 8px;
+}
+
+.property-card__price-main,
+.property-card__duration,
+.property-card__price-combined {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.property-card__price-combined {
+  font-weight: 600;
+}
+
+.property-card__duration-text {
+  font-size: 14px;
+  color: #717171;
+}
+
+.property-card__separator {
+  color: #717171;
+  margin-right: 4px;
+}
+
+.property-card__separator-dot {
+  color: #717171;
+  margin: 0 4px;
+}
+
+.property-card__price {
+  font-size: 16px;
+  font-weight: 600;
+  color: #222222;
+}
+
+.property-card__subtext {
+  font-size: 14px;
+  color: #717171;
+}
+
+.property-card__compare-price {
+  font-size: 14px;
+  color: #717171;
+  text-decoration: line-through;
+  margin-left: 8px;
+}
+
+.property-card__rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: auto;
+}
+
+.property-card__rating-value {
+  font-weight: 600;
+  color: #222222;
+}
+
+.property-card__rating-text {
+  font-size: 14px;
+  color: #717171;
+}
+
+.property-card__link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
+/* Mobile optimizations */
+@media (max-width: 639px) {
+  .property-card {
+    height: 280px;
+  }
+  
+  .property-card__content {
+    height: calc(100% - 133px);
+    overflow: hidden;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:blocks.property_card.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "t:blocks.property_card.settings.product.label"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.property_card.presets.name",
+      "category": "t:blocks.property_card.presets.category"
+    }
+  ]
+}
+{% endschema %}

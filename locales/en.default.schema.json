@@ -1279,6 +1279,118 @@
           "label": "Card border radius"
         }
       }
+    },
+    "property_list": {
+      "name": "Property List",
+      "presets": {
+        "name": "Property List",
+        "category": "Custom"
+      },
+      "settings": {
+        "collection": {
+          "label": "Collection"
+        },
+        "header__content": {
+          "content": "Content settings"
+        },
+        "heading": {
+          "label": "Heading",
+          "info": "Override the collection title. Leave blank to use collection name."
+        },
+        "heading_size": {
+          "label": "Heading size"
+        },
+        "desktop_items_to_show": {
+          "label": "Desktop properties to show"
+        },
+        "mobile_items_to_show": {
+          "label": "Mobile properties to show"
+        },
+        "header__layout": {
+          "content": "Layout settings"
+        },
+        "layout_type": {
+          "label": "Layout type",
+          "options": {
+            "grid": "Grid",
+            "carousel": "Carousel"
+          }
+        },
+        "carousel_on_mobile": {
+          "label": "Carousel on mobile"
+        },
+        "columns": {
+          "label": "Columns"
+        },
+        "mobile_columns": {
+          "label": "Mobile columns",
+          "options": {
+            "one": "1",
+            "two": "2"
+          }
+        },
+        "mobile_card_size": {
+          "label": "Mobile card size",
+          "options": {
+            "two": "2 cards"
+          }
+        },
+        "columns_gap": {
+          "label": "Columns gap"
+        },
+        "header__badge": {
+          "content": "Badge settings"
+        },
+        "badge_tag": {
+          "label": "Badge tag",
+          "info": "Products with this tag will show the badge. Use hyphens for multi-word tags."
+        },
+        "badge_text": {
+          "label": "Badge text"
+        },
+        "duration_text": {
+          "label": "Duration text"
+        },
+        "header__design": {
+          "content": "Design settings"
+        },
+        "section_width": {
+          "label": "Section width",
+          "options": {
+            "page": "Page width",
+            "full": "Full width"
+          }
+        },
+        "gap": {
+          "label": "Gap"
+        },
+        "color_scheme": {
+          "label": "Color scheme"
+        },
+        "padding_top": {
+          "label": "Top padding"
+        },
+        "padding_bottom": {
+          "label": "Bottom padding"
+        },
+        "card_border_radius": {
+          "label": "Card border radius"
+        }
+      },
+      "blocks": {
+        "property_card": {
+          "name": "Property Card",
+          "presets": {
+            "name": "Property Card",
+            "category": "Content"
+          },
+          "settings": {
+            "product": {
+              "label": "Product"
+            }
+          }
+        }
+      }
     }
   }
 }
