@@ -208,10 +208,10 @@
   -ms-overflow-style: none;
 }
 
-/* Mobile - no padding for single item display */
+/* Mobile - add padding to match original design */
 @media (max-width: 639px) {
   .scroller-track {
-    padding: 0;
+    padding: 0 20px;
   }
 }
 
@@ -408,10 +408,11 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Mobile styles - 100% width for single item display */
+/* Mobile styles - 95.5% width to match original design */
 .scroller-item {
-  flex: 0 0 100%;
-  max-width: 100%;
+  flex: 0 0 95.5%;
+  max-width: 95.5%;
+  height: 245px; /* Match original design height */
 }
 
 /* Tablet styles */
