@@ -1,8 +1,9 @@
 {%- assign collection = collections[section.settings.collection] -%}
 {%- assign products_to_show = collection.products -%}
-{%- assign items_count = section.settings.items_to_show -%}
+{%- assign desktop_items_count = section.settings.desktop_items_to_show -%}
+{%- assign mobile_items_count = section.settings.mobile_items_to_show -%}
 
-<div class="horizontal-scroller" style="max-width: {{ section.settings.max_width }}px;">
+<div class="horizontal-scroller color-{{ section.settings.color_scheme }}" style="--max-width: {{ section.settings.max_width }}px; --padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px; --card-border-radius: {{ section.settings.card_border_radius }}px;">
   <header class="scroller-header">
     <h2 class="scroller-title" style="font-size: {{ section.settings.heading_size }}px;">
       {%- if section.settings.heading != blank -%}
@@ -32,8 +33,9 @@
   <div class="scroller-container">
     <div class="scroller-track" data-items-count="{{ products_to_show.size }}">
       {%- if collection != blank -%}
-        {%- for product in products_to_show limit: items_count -%}
-          <div class="scroller-item" {{ product.shopify_attributes }}>
+        {%- comment -%} Show different number of items on mobile vs desktop {%- endcomment -%}
+        {%- for product in products_to_show limit: desktop_items_count -%}
+          <div class="scroller-item{% if forloop.index > mobile_items_count %} scroller-item--desktop-only{% endif %}" {{ product.shopify_attributes }}>
             <a href="{{ product.url }}" class="scroller-item__link">
               {%- if product.featured_image != blank -%}
                 <div class="scroller-item__image-wrapper">
@@ -87,8 +89,8 @@
           </div>
         {%- endfor -%}
       {%- else -%}
-        {%- for i in (1..items_count) -%}
-          <div class="scroller-item scroller-item--placeholder">
+        {%- for i in (1..desktop_items_count) -%}
+          <div class="scroller-item scroller-item--placeholder{% if forloop.index > mobile_items_count %} scroller-item--desktop-only{% endif %}">
             <div class="scroller-item__image-wrapper">
               {{ 'product-' | append: i | placeholder_svg_tag: 'scroller-item__placeholder-image' }}
             </div>
@@ -122,12 +124,17 @@
   margin: 0 auto;
   padding: 0 20px;
   width: 100%;
+  padding-top: var(--padding-top, 40px);
+  padding-bottom: var(--padding-bottom, 40px);
 }
 
 /* Desktop max-width constraint */
 @media (min-width: 768px) {
   .horizontal-scroller {
     padding: 0;
+    padding-top: var(--padding-top, 40px);
+    padding-bottom: var(--padding-bottom, 40px);
+    max-width: var(--max-width, 900px);
   }
 }
 
@@ -197,7 +204,7 @@
   min-width: 0;
   scroll-snap-align: start;
   background: white;
-  border-radius: 12px;
+  border-radius: var(--card-border-radius, 12px);
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.2s ease;
@@ -414,6 +421,13 @@
   }
 }
 
+/* Hide desktop-only items on mobile */
+@media (max-width: 639px) {
+  .scroller-item--desktop-only {
+    display: none;
+  }
+}
+
 /* Touch device optimizations */
 @media (hover: none) and (pointer: coarse) {
   .scroller-track {
@@ -422,6 +436,16 @@
   
   .scroller-arrow {
     display: none;
+  }
+  
+  /* Enhanced mobile touch scrolling */
+  .scroller-track {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+  
+  .scroller-item {
+    scroll-snap-align: start;
   }
 }
 {% endstylesheet %}
@@ -573,12 +597,21 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     {
       "type": "range",
-      "id": "items_to_show",
-      "label": "t:sections.horizontal_scroller.settings.items_to_show.label",
+      "id": "desktop_items_to_show",
+      "label": "t:sections.horizontal_scroller.settings.desktop_items_to_show.label",
       "min": 2,
       "max": 20,
       "step": 1,
       "default": 8
+    },
+    {
+      "type": "range",
+      "id": "mobile_items_to_show",
+      "label": "t:sections.horizontal_scroller.settings.mobile_items_to_show.label",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 6
     },
     {
       "type": "range",
@@ -622,6 +655,46 @@ document.addEventListener('DOMContentLoaded', function() {
       "id": "show_view_all",
       "label": "t:sections.horizontal_scroller.settings.show_view_all.label",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.horizontal_scroller.settings.header__design.content"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.horizontal_scroller.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:sections.horizontal_scroller.settings.padding_top.label",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:sections.horizontal_scroller.settings.padding_bottom.label",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "t:sections.horizontal_scroller.settings.card_border_radius.label",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 12
     }
   ],
   "presets": [

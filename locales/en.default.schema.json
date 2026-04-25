@@ -1231,8 +1231,11 @@
         "heading_size": {
           "label": "Heading size"
         },
-        "items_to_show": {
-          "label": "Products to show"
+        "desktop_items_to_show": {
+          "label": "Desktop products to show"
+        },
+        "mobile_items_to_show": {
+          "label": "Mobile products to show"
         },
         "max_width": {
           "label": "Maximum width"
@@ -1255,6 +1258,21 @@
         },
         "show_view_all": {
           "label": "Show \"View all\" button"
+        },
+        "header__design": {
+          "content": "Design settings"
+        },
+        "color_scheme": {
+          "label": "Color scheme"
+        },
+        "padding_top": {
+          "label": "Top padding"
+        },
+        "padding_bottom": {
+          "label": "Bottom padding"
+        },
+        "card_border_radius": {
+          "label": "Card border radius"
         }
       }
     }
