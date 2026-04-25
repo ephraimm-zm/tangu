@@ -5,29 +5,42 @@
 
 <div class="horizontal-scroller color-{{ section.settings.color_scheme }} section-{{ section.settings.section_width }}" style="--padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px; --card-border-radius: {{ section.settings.card_border_radius }}px;">
   <header class="scroller-header">
-    <h2 class="scroller-title" style="font-size: {{ section.settings.heading_size }}px;">
-      {%- if section.settings.heading != blank -%}
-        {{ section.settings.heading }}
-      {%- elsif collection != blank -%}
-        {{ collection.title }}
-      {%- else -%}
-        {{ 'sections.horizontal_scroller.default_title' | t }}
-      {%- endif -%}
-    </h2>
-    <div class="scroller-controls">
-      {%- if products_to_show.size > 1 -%}
-        <button class="scroller-arrow scroller-arrow--prev" aria-label="Previous" disabled>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M15 18l-6-6 6-6"/>
-          </svg>
-        </button>
-        <button class="scroller-arrow scroller-arrow--next" aria-label="Next">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 18l6-6-6-6"/>
-          </svg>
-        </button>
-      {%- endif -%}
+    <div class="scroller-header-top">
+      <h2 class="scroller-title" style="font-size: {{ section.settings.heading_size }}px;">
+        {%- if section.settings.heading != blank -%}
+          {{ section.settings.heading }}
+        {%- elsif collection != blank -%}
+          {{ collection.title }}
+        {%- else -%}
+          {{ 'sections.horizontal_scroller.default_title' | t }}
+        {%- endif -%}
+      </h2>
+      <div class="scroller-controls">
+        {%- if products_to_show.size > 1 -%}
+          <button class="scroller-arrow scroller-arrow--prev" aria-label="Previous" disabled>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+          </button>
+          <button class="scroller-arrow scroller-arrow--next" aria-label="Next">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
+          </button>
+        {%- endif -%}
+      </div>
     </div>
+    {%- if collection != blank -%}
+      <div class="scroller-description">
+        {%- assign mobile_count = mobile_items_count -%}
+        {%- assign total_count = collection.products.size -%}
+        {%- if total_count > mobile_count -%}
+          {{ mobile_count }} of {{ total_count }} items showing
+        {%- else -%}
+          {{ total_count }} items
+        {%- endif -%}
+      </div>
+    {%- endif -%}
   </header>
 
   <div class="scroller-container">
@@ -158,10 +171,20 @@
 }
 
 .scroller-header {
+  margin-bottom: 16px;
+}
+
+.scroller-header-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
+}
+
+.scroller-description {
+  font-size: 14px;
+  color: #717171;
+  font-weight: 400;
 }
 
 .scroller-title {
