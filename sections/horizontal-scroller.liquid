@@ -1,0 +1,376 @@
+<div class="horizontal-scroller" style="max-width: {{ section.settings.max_width }}px;">
+  <header class="scroller-header">
+    <h2 class="scroller-title" style="font-size: {{ section.settings.heading_size }}px;">{{ section.settings.heading }}</h2>
+    <div class="scroller-controls">
+      {% if section.blocks.size > 4 %}
+        <button class="scroller-arrow scroller-arrow--prev" aria-label="Previous">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+        <button class="scroller-arrow scroller-arrow--next" aria-label="Next">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </button>
+      {% endif %}
+    </div>
+  </header>
+
+  <div class="scroller-container">
+    <div class="scroller-track">
+      {% for block in section.blocks %}
+        <div class="scroller-item" {{ block.shopify_attributes }}>
+          {% if block.settings.image != blank %}
+            <div class="scroller-item__image-wrapper">
+              <img 
+                src="{{ block.settings.image | image_url: width: 400, height: 300 }}" 
+                alt="{{ block.settings.image.alt | default: block.settings.title }}"
+                class="scroller-item__image"
+                loading="lazy"
+                width="400"
+                height="300"
+              >
+              {% if block.settings.badge != blank %}
+                <span class="scroller-item__badge">{{ block.settings.badge }}</span>
+              {% endif %}
+            </div>
+          {% endif %}
+          
+          <div class="scroller-item__content">
+            {% if block.settings.title != blank %}
+              <h3 class="scroller-item__title">{{ block.settings.title }}</h3>
+            {% endif %}
+            
+            <div class="scroller-item__pricing">
+              {% if block.settings.price != blank %}
+                <span class="scroller-item__price">{{ block.settings.price }}</span>
+              {% endif %}
+              {% if block.settings.subtext != blank %}
+                <span class="scroller-item__subtext">{{ block.settings.subtext }}</span>
+              {% endif %}
+            </div>
+            
+            {% if block.settings.rating != blank %}
+              <div class="scroller-item__rating">
+                <span class="scroller-item__rating-value">{{ block.settings.rating }}</span>
+                <span class="scroller-item__rating-text">{{ 'sections.horizontal_scroller.out_of_5' | t }}</span>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+.horizontal-scroller {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  color: #222222;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  margin: 0 auto;
+}
+
+.scroller-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.scroller-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #222222;
+  margin: 0;
+}
+
+.scroller-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.scroller-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #dddddd;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.scroller-arrow:hover {
+  border-color: #222222;
+  background: #f7f7f7;
+}
+
+.scroller-container {
+  position: relative;
+}
+
+.scroller-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 16px;
+  padding: 0 20px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scroller-track::-webkit-scrollbar {
+  display: none;
+}
+
+.scroller-item {
+  flex: 0 0 280px;
+  min-width: 0;
+  scroll-snap-align: start;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease;
+}
+
+.scroller-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.scroller-item__image-wrapper {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.scroller-item__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scroller-item__badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: #222222;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.scroller-item__content {
+  padding: 16px;
+}
+
+.scroller-item__title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: #222222;
+  line-height: 1.4;
+}
+
+.scroller-item__pricing {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.scroller-item__price {
+  font-size: 16px;
+  font-weight: 600;
+  color: #222222;
+}
+
+.scroller-item__subtext {
+  font-size: 14px;
+  color: #717171;
+}
+
+.scroller-item__rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.scroller-item__rating-value {
+  font-weight: 600;
+  color: #222222;
+}
+
+.scroller-item__rating-text {
+  font-size: 14px;
+  color: #717171;
+}
+
+/* Desktop styles */
+@media (min-width: 768px) {
+  .scroller-item {
+    flex: 0 0 calc(25% - 12px);
+  }
+  
+  .scroller-track {
+    gap: 16px;
+  }
+}
+
+/* Large desktop styles */
+@media (min-width: 1024px) {
+  .scroller-item {
+    flex: 0 0 calc(20% - 13px);
+  }
+}
+{% endstylesheet %}
+
+{% javascript %}
+document.addEventListener('DOMContentLoaded', function() {
+  const scrollers = document.querySelectorAll('.horizontal-scroller');
+  
+  scrollers.forEach(function(scroller) {
+    const track = scroller.querySelector('.scroller-track');
+    const prevBtn = scroller.querySelector('.scroller-arrow--prev');
+    const nextBtn = scroller.querySelector('.scroller-arrow--next');
+    
+    if (!track || !prevBtn || !nextBtn) return;
+    
+    function scrollTrack(direction) {
+      const scrollAmount = 300; // Approximate width of one item + gap
+      if (direction === 'prev') {
+        track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      } else {
+        track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      }
+    }
+    
+    prevBtn.addEventListener('click', function() {
+      scrollTrack('prev');
+    });
+    
+    nextBtn.addEventListener('click', function() {
+      scrollTrack('next');
+    });
+    
+    // Update button states based on scroll position
+    function updateButtonStates() {
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      
+      prevBtn.disabled = track.scrollLeft <= 0;
+      nextBtn.disabled = track.scrollLeft >= maxScroll;
+      
+      prevBtn.style.opacity = prevBtn.disabled ? '0.5' : '1';
+      nextBtn.style.opacity = nextBtn.disabled ? '0.5' : '1';
+    }
+    
+    track.addEventListener('scroll', updateButtonStates);
+    updateButtonStates(); // Initial state
+  });
+});
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.horizontal_scroller.name",
+  "class": "horizontal-scroller-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.horizontal_scroller.settings.heading.label",
+      "default": "Popular homes in Cape Town"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "t:sections.horizontal_scroller.settings.heading_size.label",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "t:sections.horizontal_scroller.settings.max_width.label",
+      "min": 800,
+      "max": 1400,
+      "step": 50,
+      "unit": "px",
+      "default": 900
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "t:sections.horizontal_scroller.blocks.item.name",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.horizontal_scroller.blocks.item.settings.image.label"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "t:sections.horizontal_scroller.blocks.item.settings.badge.label",
+          "default": "Guest favorite"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.horizontal_scroller.blocks.item.settings.title.label",
+          "default": "Hotel in Cape Town"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "t:sections.horizontal_scroller.blocks.item.settings.price.label",
+          "default": "$144"
+        },
+        {
+          "type": "text",
+          "id": "subtext",
+          "label": "t:sections.horizontal_scroller.blocks.item.settings.subtext.label",
+          "default": "for 2 nights"
+        },
+        {
+          "type": "text",
+          "id": "rating",
+          "label": "t:sections.horizontal_scroller.blocks.item.settings.rating.label",
+          "default": "4.88"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.horizontal_scroller.presets.name",
+      "category": "t:sections.horizontal_scroller.presets.category",
+      "blocks": [
+        {
+          "type": "item"
+        },
+        {
+          "type": "item"
+        },
+        {
+          "type": "item"
+        },
+        {
+          "type": "item"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
