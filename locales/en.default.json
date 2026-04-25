@@ -388,8 +388,12 @@
         "mobile_items_to_show": {
           "label": "Mobile products to show"
         },
-        "max_width": {
-          "label": "Maximum width"
+        "section_width": {
+          "label": "Section width",
+          "options": {
+            "page": "Page width",
+            "full": "Full width"
+          }
         },
         "header__badge": {
           "content": "Badge settings"

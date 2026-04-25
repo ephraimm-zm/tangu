@@ -3,7 +3,7 @@
 {%- assign desktop_items_count = section.settings.desktop_items_to_show -%}
 {%- assign mobile_items_count = section.settings.mobile_items_to_show -%}
 
-<div class="horizontal-scroller color-{{ section.settings.color_scheme }}" style="--max-width: {{ section.settings.max_width }}px; --padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px; --card-border-radius: {{ section.settings.card_border_radius }}px;">
+<div class="horizontal-scroller color-{{ section.settings.color_scheme }} section-{{ section.settings.section_width }}" style="--padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px; --card-border-radius: {{ section.settings.card_border_radius }}px;">
   <header class="scroller-header">
     <h2 class="scroller-title" style="font-size: {{ section.settings.heading_size }}px;">
       {%- if section.settings.heading != blank -%}
@@ -128,13 +128,32 @@
   padding-bottom: var(--padding-bottom, 40px);
 }
 
-/* Desktop max-width constraint */
+/* Page width constraint - matches theme header/footer */
+.horizontal-scroller.section-page-width {
+  max-width: var(--page-width, 1200px);
+}
+
+/* Full width - matches theme header/footer */
+.horizontal-scroller.section-full-width {
+  max-width: 100%;
+}
+
+/* Desktop adjustments */
 @media (min-width: 768px) {
   .horizontal-scroller {
     padding: 0;
     padding-top: var(--padding-top, 40px);
     padding-bottom: var(--padding-bottom, 40px);
-    max-width: var(--max-width, 900px);
+  }
+  
+  .horizontal-scroller.section-page-width {
+    padding-left: var(--page-margin, 20px);
+    padding-right: var(--page-margin, 20px);
+  }
+  
+  .horizontal-scroller.section-full-width {
+    padding-left: var(--page-margin, 40px);
+    padding-right: var(--page-margin, 40px);
   }
 }
 
@@ -614,14 +633,20 @@ document.addEventListener('DOMContentLoaded', function() {
       "default": 6
     },
     {
-      "type": "range",
-      "id": "max_width",
-      "label": "t:sections.horizontal_scroller.settings.max_width.label",
-      "min": 800,
-      "max": 1400,
-      "step": 50,
-      "unit": "px",
-      "default": 900
+      "type": "select",
+      "id": "section_width",
+      "label": "t:sections.horizontal_scroller.settings.section_width.label",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:sections.horizontal_scroller.settings.section_width.options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.horizontal_scroller.settings.section_width.options.full"
+        }
+      ],
+      "default": "page-width"
     },
     {
       "type": "header",
