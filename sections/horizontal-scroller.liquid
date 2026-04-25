@@ -15,7 +15,7 @@
       {%- endif -%}
     </h2>
     <div class="scroller-controls">
-      {%- if products_to_show.size > 4 -%}
+      {%- if products_to_show.size > 1 -%}
         <button class="scroller-arrow scroller-arrow--prev" aria-label="Previous" disabled>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M15 18l-6-6 6-6"/>
@@ -208,10 +208,10 @@
   -ms-overflow-style: none;
 }
 
-/* Mobile - add padding for peek effect */
+/* Mobile - no padding for single item display */
 @media (max-width: 639px) {
   .scroller-track {
-    padding: 0 12px;
+    padding: 0;
   }
 }
 
@@ -408,10 +408,10 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Mobile styles - 85% width to show peek effect */
+/* Mobile styles - 100% width for single item display */
 .scroller-item {
-  flex: 0 0 85%;
-  max-width: 300px;
+  flex: 0 0 100%;
+  max-width: 100%;
 }
 
 /* Tablet styles */
@@ -447,14 +447,15 @@
   }
 }
 
-/* Touch device optimizations */
+/* Touch device optimizations - keep arrows for mobile slider */
 @media (hover: none) and (pointer: coarse) {
   .scroller-track {
-    scroll-snap-type: none;
+    scroll-snap-type: x mandatory;
   }
   
+  /* Show arrows on mobile for slider functionality */
   .scroller-arrow {
-    display: none;
+    display: flex;
   }
   
   /* Enhanced mobile touch scrolling */
@@ -575,7 +576,8 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     
-    // Initialize button states
+    // Initialize slider at first position and button states
+    track.scrollTo({ left: 0, behavior: 'instant' }); // Start at first item
     setTimeout(updateButtonStates, 100); // Small delay to ensure layout is complete
     
     // Handle window resize
