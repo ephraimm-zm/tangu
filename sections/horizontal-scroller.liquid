@@ -52,13 +52,28 @@
               {%- endif -%}
               
               <div class="scroller-item__content">
+                {%- if product.tags contains section.settings.badge_tag -%}
+                  <div class="scroller-item__badge-row">
+                    <span class="scroller-item__badge">{{ section.settings.badge_text }}</span>
+                    <span class="scroller-item__badge">{{ section.settings.badge_text }}</span>
+                  </div>
+                {%- endif -%}
+                
                 <h3 class="scroller-item__title">{{ product.title }}</h3>
                 
                 <div class="scroller-item__pricing">
-                  <span class="scroller-item__price">{{ product.price | money }}</span>
-                  {%- if product.compare_at_price > product.price -%}
-                    <span class="scroller-item__compare-price">{{ product.compare_at_price | money }}</span>
-                  {%- endif -%}
+                  <div class="scroller-item__price-main">
+                    <span class="scroller-item__price">{{ product.price | money }}</span>
+                  </div>
+                  <div class="scroller-item__duration">
+                    <span class="scroller-item__duration-text">{{ section.settings.duration_text | default: "for 2 nights" }}</span>
+                  </div>
+                  <div class="scroller-item__price-combined">
+                    <span class="scroller-item__price">{{ product.price | money }}</span>
+                    <span class="scroller-item__duration-text">{{ section.settings.duration_text | default: "for 2 nights" }}</span>
+                  </div>
+                  <span class="scroller-item__separator">,</span>
+                  <span class="scroller-item__separator-dot">·</span>
                 </div>
                 
                 {%- if product.metafields.reviews.rating.value != blank -%}
@@ -105,6 +120,15 @@
   color: #222222;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+}
+
+/* Desktop max-width constraint */
+@media (min-width: 768px) {
+  .horizontal-scroller {
+    padding: 0;
+  }
 }
 
 .scroller-header {
@@ -153,9 +177,16 @@
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   gap: 16px;
-  padding: 0 20px;
+  padding: 0;
   scrollbar-width: none;
   -ms-overflow-style: none;
+}
+
+/* Mobile - add padding for peek effect */
+@media (max-width: 639px) {
+  .scroller-track {
+    padding: 0 12px;
+  }
 }
 
 .scroller-track::-webkit-scrollbar {
@@ -163,7 +194,6 @@
 }
 
 .scroller-item {
-  flex: 0 0 280px;
   min-width: 0;
   scroll-snap-align: start;
   background: white;
@@ -201,6 +231,19 @@
   font-weight: 500;
 }
 
+.scroller-item__badge-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.scroller-item__badge-row .scroller-item__badge {
+  position: static;
+  background: #ffffff;
+  color: #222222;
+  border: 1px solid #dddddd;
+}
+
 .scroller-item__content {
   padding: 16px;
 }
@@ -214,10 +257,35 @@
 }
 
 .scroller-item__pricing {
+  margin-bottom: 8px;
+}
+
+.scroller-item__price-main,
+.scroller-item__duration,
+.scroller-item__price-combined {
   display: flex;
   align-items: center;
   gap: 4px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+}
+
+.scroller-item__price-combined {
+  font-weight: 600;
+}
+
+.scroller-item__duration-text {
+  font-size: 14px;
+  color: #717171;
+}
+
+.scroller-item__separator {
+  color: #717171;
+  margin-right: 4px;
+}
+
+.scroller-item__separator-dot {
+  color: #717171;
+  margin: 0 4px;
 }
 
 .scroller-item__price {
@@ -314,14 +382,28 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Desktop styles */
-@media (min-width: 768px) {
+/* Mobile styles - 85% width to show peek effect */
+.scroller-item {
+  flex: 0 0 85%;
+  max-width: 300px;
+}
+
+/* Tablet styles */
+@media (min-width: 640px) {
   .scroller-item {
-    flex: 0 0 calc(25% - 12px);
+    flex: 0 0 calc(33.333% - 11px);
+    max-width: none;
   }
   
   .scroller-track {
     gap: 16px;
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 768px) {
+  .scroller-item {
+    flex: 0 0 calc(25% - 12px);
   }
 }
 
@@ -524,6 +606,12 @@ document.addEventListener('DOMContentLoaded', function() {
       "id": "badge_text",
       "label": "t:sections.horizontal_scroller.settings.badge_text.label",
       "default": "Guest favorite"
+    },
+    {
+      "type": "text",
+      "id": "duration_text",
+      "label": "t:sections.horizontal_scroller.settings.duration_text.label",
+      "default": "for 2 nights"
     },
     {
       "type": "header",

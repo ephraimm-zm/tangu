@@ -398,6 +398,9 @@
         "badge_text": {
           "label": "Badge text"
         },
+        "duration_text": {
+          "label": "Duration text"
+        },
         "header__footer": {
           "content": "Footer settings"
         },
