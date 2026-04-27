@@ -37,7 +37,7 @@
 %}
 
 <product-price
-  class="text-block {{ text_block_classes }} text-{{ block_settings.alignment }} {{ block_settings.type_preset | default: 'paragraph' }} spacing-style"
+  class="text-block {{ text_block_classes }} text-{{ block_settings.alignment }} {{ block_settings.type_preset | default: 'paragraph' }} spacing-style airbnb-price"
   data-block-id="{{ block.id }}"
   data-product-id="{{ product_resource.id }}"
   style="
@@ -47,11 +47,14 @@
   "
   {{ block.shopify_attributes }}
 >
-  {% render 'price',
-    show_unit_price: true,
-    product_resource: product_resource,
-    show_sale_price_first: block_settings.show_sale_price_first
-  %}
+  <div class="airbnb-price-wrapper">
+    {% render 'price',
+      show_unit_price: true,
+      product_resource: product_resource,
+      show_sale_price_first: block_settings.show_sale_price_first
+    %}
+    <span class="nights-text">for 2 nights</span>
+  </div>
 
   {% if block_settings.show_tax_info %}
     <div class="tax-note">
@@ -83,6 +86,26 @@
     </div>
   {%- endif -%}
 </product-price>
+
+{% stylesheet %}
+  .airbnb-price-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  
+  .nights-text {
+    font-size: 0.85em;
+    color: var(--color-foreground);
+    opacity: 0.8;
+  }
+  
+  @media screen and (max-width: 749px) {
+    .nights-text {
+      font-size: 0.8em;
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {

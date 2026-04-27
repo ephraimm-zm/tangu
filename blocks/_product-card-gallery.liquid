@@ -4,6 +4,11 @@
 
 {% capture children %}
   {% unless product == blank %}
+    <div class="airbnb-style-badges">
+      <div class="guest-favorite-badge">
+        <span class="guest-favorite-text">Guest favorite</span>
+      </div>
+    </div>
     <div
       class="product-badges product-badges--{{ settings.badge_position }}"
       style="
@@ -44,6 +49,43 @@
 </div>
 
 {% render 'product-badges-styles' %}
+
+{% stylesheet %}
+  .airbnb-style-badges {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: var(--layer-raised);
+  }
+  
+  .guest-favorite-badge {
+    background: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 12px;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #222222;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .guest-favorite-text {
+    white-space: nowrap;
+  }
+  
+  @media screen and (max-width: 749px) {
+    .airbnb-style-badges {
+      top: 6px;
+      left: 6px;
+    }
+    
+    .guest-favorite-badge {
+      font-size: 11px;
+      padding: 3px 6px;
+      border-radius: 10px;
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
