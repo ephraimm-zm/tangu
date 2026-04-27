@@ -91,7 +91,7 @@
         "padding-block-end": 72
       }
     },
-    "product_list_fa6P9H": {
+    "product_list_CypdUn": {
       "type": "product-list",
       "blocks": {
         "static-header": {
@@ -128,17 +128,17 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "product_list_text_YFtzcL": {
+            "product_list_text_ewfkQV": {
               "type": "_product-list-text",
               "name": "t:names.collection_title",
               "settings": {
-                "text": "<h3>{{ closest.collection.title }}</h3>",
+                "text": "<h2>{{ closest.collection.title }}</h2>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
-                "type_preset": "h4",
+                "type_preset": "h3",
                 "font": "var(--font-body--family)",
-                "font_size": "",
+                "font_size": "1rem",
                 "line_height": "normal",
                 "letter_spacing": "normal",
                 "case": "none",
@@ -154,7 +154,7 @@
               },
               "blocks": {}
             },
-            "product_list_button_MWeP9V": {
+            "product_list_button_LVBi7J": {
               "type": "_product-list-button",
               "name": "t:names.product_list_button",
               "settings": {
@@ -170,8 +170,8 @@
             }
           },
           "block_order": [
-            "product_list_text_YFtzcL",
-            "product_list_button_MWeP9V"
+            "product_list_text_ewfkQV",
+            "product_list_button_LVBi7J"
           ]
         },
         "static-product-card": {
@@ -192,7 +192,7 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "product_card_gallery_677WP3": {
+            "product_card_gallery_iaNtEJ": {
               "type": "_product-card-gallery",
               "name": "t:names.product_card_media",
               "settings": {
@@ -208,14 +208,14 @@
               },
               "blocks": {}
             },
-            "product_title_YXxMTj": {
+            "product_title_zwzWJY": {
               "type": "product-title",
               "name": "t:names.product_title",
               "settings": {
-                "width": "100%",
+                "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
-                "type_preset": "rte",
+                "type_preset": "paragraph",
                 "font": "var(--font-body--family)",
                 "font_size": "1rem",
                 "line_height": "normal",
@@ -233,7 +233,7 @@
               },
               "blocks": {}
             },
-            "price_JQzVV4": {
+            "price_pkQLYM": {
               "type": "price",
               "name": "t:names.product_price",
               "settings": {
@@ -258,26 +258,25 @@
             }
           },
           "block_order": [
-            "product_card_gallery_677WP3",
-            "product_title_YXxMTj",
-            "price_JQzVV4"
+            "product_card_gallery_iaNtEJ",
+            "product_title_zwzWJY",
+            "price_pkQLYM"
           ]
         }
       },
-      "disabled": true,
-      "name": "Featured collection",
+      "name": "t:names.products_carousel",
       "settings": {
-        "collection": "all",
-        "layout_type": "grid",
+        "collection": "",
+        "layout_type": "carousel",
         "carousel_on_mobile": false,
-        "max_products": 8,
+        "max_products": 6,
         "columns": 4,
         "mobile_columns": "2",
         "mobile_card_size": "60cqw",
         "columns_gap": 8,
         "rows_gap": 24,
         "icons_style": "arrow",
-        "icons_shape": "none",
+        "icons_shape": "circle",
         "section_width": "page-width",
         "horizontal_alignment": "flex-start",
         "gap": 28,
@@ -285,31 +284,10 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
-    },
-    "horizontal_scroller_ix649e": {
-      "type": "horizontal-scroller",
-      "name": "t:sections.horizontal_scroller.presets.name",
-      "settings": {
-        "collection": "automated-collection",
-        "heading": "",
-        "heading_size": 14,
-        "desktop_items_to_show": 8,
-        "mobile_items_to_show": 2,
-        "section_width": "page-width",
-        "badge_tag": "guest-favorite",
-        "badge_text": "Guest favorite",
-        "duration_text": "for 2 nights",
-        "show_view_all": true,
-        "color_scheme": "",
-        "padding_top": 40,
-        "padding_bottom": 40,
-        "card_border_radius": 12
-      }
     }
   },
   "order": [
     "hero_jVaWmY",
-    "product_list_fa6P9H",
-    "horizontal_scroller_ix649e"
+    "product_list_CypdUn"
   ]
 }
